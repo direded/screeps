@@ -2,14 +2,27 @@
 
 // memory extension samples
 interface CreepMemory {
-	role: string
-	room: string
-	working: boolean
+	role?: string
+	room?: string
+	working?: boolean
+	// [key: string]: any
+
+	upgrading?: boolean
+	building?: boolean
+}
+
+interface RoomMemory {
+	energy_sources?: { [key: string]: EnergySourceMemory }
+	// [key: string]: any
 }
 
 interface Memory {
 	uuid: number
 	log: any
+}
+
+interface EnergySourceMemory {
+
 }
 
 // `global` extension samples
