@@ -1,21 +1,33 @@
 {
   "rulesDirectory": "tslint-plugin-prettier",
-  "extends" : [
+  "extends": [
     "tslint:recommended",
     "tslint-config-prettier"
   ],
   "rules": {
     "forin": false,
-    "interface-name": [true, "never-prefix"],
-    "member-ordering": [false],
-    "no-console": [false],
-    "no-namespace": [true, "allow-declarations"],
+    "interface-name": [
+      true,
+      "never-prefix"
+    ],
+    "member-ordering": [
+      false
+    ],
+    "no-console": [
+      false
+    ],
+    "no-namespace": [
+      true,
+      "allow-declarations"
+    ],
     "variable-name": [
       true,
       "ban-keywords",
       "check-format",
       "allow-pascal-case",
       "allow-leading-underscore"
-    ]
+    ],
+    "prefer-const": false,
+    "no-string-literal": false
   }
 }
