@@ -2,7 +2,7 @@ import { BuilderRole, HarvesterRole, UpgraderRole } from "roles"
 
 const creepMax: { [key: string]: number } = {
 	harvester: 2,
-	builder: 2,
+	builder: 6,
 	upgrader: 2
 }
 
