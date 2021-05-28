@@ -1,8 +1,10 @@
 import { BuilderRole, HarvesterRole, UpgraderRole } from "roles"
 
+import { CreepTemplate, CreepTemplateBodyPart } from "bodytype"
+
 const creepMax: { [key: string]: number } = {
 	harvester: 2,
-	builder: 6,
+	builder: 2,
 	upgrader: 2
 }
 
@@ -15,6 +17,29 @@ const creepRole: { [key: string]: CreepRole } = {
 const creepRolePriority = ["harvester", "upgrader", "builder"]
 
 export class Overmind {
+
+	private static CreepTypes = {
+		worker: {
+			name: 'worker',
+			template: new CreepTemplate(1, true, [
+				new CreepTemplateBodyPart(WORK, 1),
+				new CreepTemplateBodyPart(CARRY, 1, true),
+			])
+		},
+		balanced: {
+			name: 'balanced',
+			template: new CreepTemplate(1, false, [
+				new CreepTemplateBodyPart(WORK, 1),
+				new CreepTemplateBodyPart(CARRY, 1, true),
+			])
+		},
+		transporter: {
+			name: 'transporter',
+			template: new CreepTemplate(1, false, [
+				new CreepTemplateBodyPart(CARRY, 1),
+			])
+		}
+	}
 
 	public static update(room: Room): void {
 		room.memory = room.memory || {}
@@ -49,7 +74,6 @@ export class Overmind {
 				}
 			}
 		}
-
 	}
-
 }
+
