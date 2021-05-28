@@ -4,8 +4,8 @@ import { CreepTemplate, CreepTemplateBodyPart } from "bodytype"
 
 const creepMax: { [key: string]: number } = {
 	harvester: 2,
-	builder: 2,
-	upgrader: 2
+	builder: 1,
+	upgrader: 3
 }
 
 const creepRole: { [key: string]: CreepRole } = {
@@ -16,39 +16,25 @@ const creepRole: { [key: string]: CreepRole } = {
 
 const creepRolePriority = ["harvester", "upgrader", "builder"]
 
+const creepRoleBody: { [key: string]: CreepTemplate } = {
+	harvester: new CreepTemplate(1, true, [
+		new CreepTemplateBodyPart(WORK, 1),
+		new CreepTemplateBodyPart(CARRY, 1, true),
+	]),
+	upgrader: new CreepTemplate(0.5, false, [
+		new CreepTemplateBodyPart(WORK, 1),
+		new CreepTemplateBodyPart(CARRY, 1, true),
+	]),
+	builder: new CreepTemplate(0.5, false, [
+		new CreepTemplateBodyPart(WORK, 1),
+		new CreepTemplateBodyPart(CARRY, 1, true),
+	])
+}
+
 export class Overmind {
 
-	private static CreepTypes = {
-		worker: {
-			name: 'worker',
-			template: new CreepTemplate(1, true, [
-				new CreepTemplateBodyPart(WORK, 1),
-				new CreepTemplateBodyPart(CARRY, 1, true),
-			])
-		},
-		balanced: {
-			name: 'balanced',
-			template: new CreepTemplate(1, false, [
-				new CreepTemplateBodyPart(WORK, 1),
-				new CreepTemplateBodyPart(CARRY, 1, true),
-			])
-		},
-		transporter: {
-			name: 'transporter',
-			template: new CreepTemplate(1, false, [
-				new CreepTemplateBodyPart(CARRY, 1),
-			])
-		}
-	}
-
 	public static update(room: Room): void {
-		room.memory = room.memory || {}
-		let memory = room.memory
-
-		memory.energy_sources = memory.energy_sources || {}
-		for (let source of room.find(FIND_SOURCES)) {
-			memory.energy_sources[source.id as string] = memory.energy_sources[source.id as string] || {}
-		}
+		this.initMemory()
 
 		const creepCounter: any = {
 			harvester: 0 as number,
@@ -61,16 +47,37 @@ export class Overmind {
 			creepRole[creep.memory.role!].update(creep)
 			creepCounter[creep.memory.role!]++
 		}
+
 		let spawn = room.find(FIND_MY_SPAWNS)[0]
-		if (!spawn.spawning) {
+		let spawnInfo = this.getSpawnEnergyInfo(spawn)
+		if (!spawn.spawning && (spawnInfo.current == spawnInfo.max || creepCounter["harvester"] <= 0)) {
 			for (let i = 0; i < creepRolePriority.length; i++) {
 				let priority = creepRolePriority[i]
 				if (creepCounter[priority] < creepMax[priority]) {
-					if (creepRole[priority].create(spawn) == 0)
+					let body = creepRoleBody[priority].buildCreepBody(spawnInfo.current)
+					if (body == null) {
+						console.log("Can't spawn " + priority)
+						break
+					}
+					if (spawn.spawnCreep(body, `${priority} #${Game.time}`, { memory: { role: priority } }) == 0)
 						break
 				}
 			}
 		}
 	}
+
+	private static getSpawnEnergyInfo(spawn: StructureSpawn): { max: number, current: number } {
+		let info = { current: spawn.store.getUsedCapacity(RESOURCE_ENERGY), max: spawn.store.getCapacity(RESOURCE_ENERGY) }
+		for (let exp of spawn.room.find<StructureExtension>(FIND_MY_STRUCTURES, { filter: s => s.structureType == STRUCTURE_EXTENSION })) {
+			info.current += exp.store.getUsedCapacity(RESOURCE_ENERGY)
+			info.max += exp.store.getCapacity(RESOURCE_ENERGY)
+		}
+		return info
+	}
+
+	private static initMemory() {
+		Memory.tasks = Memory.tasks ?? {}
+	}
+
 }
 

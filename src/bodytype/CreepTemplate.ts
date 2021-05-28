@@ -12,7 +12,7 @@ export class CreepTemplate {
 		this.parts = parts
 	}
 
-	buildCreepBody(energy: number) {
+	buildCreepBody(energy: number): BodyPartConstant[] | null {
 		var partsCount: { [key in BodyPartConstant]?: number } = {}
 		var fixedCost = 0, fixedCount = 0
 		var ratioSum = 0, ratioCostSum = 0
@@ -24,8 +24,7 @@ export class CreepTemplate {
 				fixedCost += BODYPART_COST[el.name]
 				fixedCount++
 				partsCount[el.name] = el.value
-			}
-			else {
+			} else {
 				if (mainPart == null)
 					mainPart = el
 				var ratio = el.value / mainPart.value
@@ -37,19 +36,21 @@ export class CreepTemplate {
 		let m = 0
 		if (this.moveFixed) {
 			m = this.moveValue
-		}
-		else {
+		} else {
 			m = Math.ceil((energy - fixedCost + fixedCount * ratioCostSum) / (ratioCostSum / (this.moveValue * ratioSum) + BODYPART_COST[MOVE]))
 		}
 		// var main = Math.ceil((m / this.moveValue - fixedCount) / ratioSum)
 		var total = energy - fixedCost - m * BODYPART_COST[MOVE]
 		// now total excludes cost of fixed bodyparts
-		var dynamicCost = 0
+		var dynamicCost = m * BODYPART_COST[MOVE]
 		for (const part of dynamicParts) {
 			partsCount[part.name] = Math.floor(part.value * total / BODYPART_COST[part.name])
+			if (partsCount[part.name] == 0) {
+				return null
+			}
 			dynamicCost += partsCount[part.name]! * BODYPART_COST[part.name]
 		}
-		var body = []
+		var body: BodyPartConstant[] = []
 		for (const part of this.parts) {
 			for (let i = 0; i < partsCount[part.name]!; i++) {
 				body.push(part.name)
@@ -58,8 +59,7 @@ export class CreepTemplate {
 		for (let i = 0; i < m; i++) {
 			body.push(MOVE)
 		}
-		if (dynamicCost != total)
-			console.log(`Extra energy: ${dynamicCost}`, body)
+		console.log(`Body calculated. Energy: ${energy}, body cost: ${dynamicCost + fixedCost}, body: ${body}`)
 		return body
 	}
 }
