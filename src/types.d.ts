@@ -31,3 +31,10 @@ declare namespace NodeJS {
 		log: any
 	}
 }
+
+// Other
+
+interface CreepRole {
+	update(creep: Creep): void
+	create(spawn: StructureSpawn): number
+}

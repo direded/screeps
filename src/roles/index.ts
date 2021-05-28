@@ -1,4 +1,3 @@
-export * from "./Harvester"
-export * from "./Builder"
-export * from "./Upgrader"
-export * from "./Overmind"
+export * from "./HarvesterRole"
+export * from "./BuilderRole"
+export * from "./UpgraderRole"

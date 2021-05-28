@@ -1,10 +1,10 @@
-export class Upgrader {
+export class UpgraderRole implements CreepRole {
 
-	public static create(spawn: StructureSpawn) {
-		spawn.spawnCreep([WORK, CARRY, MOVE], "Harvester #" + Game.time, { memory: { role: "harvester" } })
+	public create(spawn: StructureSpawn): number {
+		return spawn.spawnCreep([WORK, CARRY, MOVE], "Upgrader #" + Game.time, { memory: { role: "upgrader" } })
 	}
 
-	public static update(creep: Creep): void {
+	public update(creep: Creep): void {
 		if (creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
 			creep.memory.upgrading = false
 			creep.say('🔄 harvest')

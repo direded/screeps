@@ -1,10 +1,10 @@
-export class Harvester {
+export class HarvesterRole implements CreepRole {
 
-    public static create(spawn: StructureSpawn) {
-        spawn.spawnCreep([WORK, CARRY, MOVE], "Harvester #" + Game.time, { memory: { role: "harvester" } })
+    public create(spawn: StructureSpawn): number {
+        return spawn.spawnCreep([WORK, CARRY, MOVE], "Harvester #" + Game.time, { memory: { role: "harvester" } })
     }
 
-    public static update(creep: Creep): void {
+    public update(creep: Creep): void {
         if (creep.store.getFreeCapacity() > 0) {
             var sources = creep.room.find(FIND_SOURCES)
             if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
