@@ -65,10 +65,7 @@ export class Overmind {
 		if (!spawn.spawning) {
 			for (let i = 0; i < creepRolePriority.length; i++) {
 				let priority = creepRolePriority[i]
-				console.log("A: " + creepCounter[priority] + " " + creepMax[priority])
-
 				if (creepCounter[priority] < creepMax[priority]) {
-					console.log("B")
 					if (creepRole[priority].create(spawn) == 0)
 						break
 				}
