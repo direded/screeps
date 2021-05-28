@@ -17,8 +17,7 @@ interface RoomMemory {
 }
 
 interface Memory {
-	uuid: number
-	log: any
+	tasks: { [key: string]: [TaskMemory] }
 }
 
 interface EnergySourceMemory {
@@ -37,4 +36,17 @@ declare namespace NodeJS {
 interface CreepRole {
 	update(creep: Creep): void
 	create(spawn: StructureSpawn): number
+}
+
+interface TaskMemory {
+
+}
+
+interface HarvestTaskMemory extends TaskMemory {
+	target?: Id<HarvestTask.Target>
+}
+
+declare namespace HarvestTask {
+	type TargetStorage = StructureExtension | StructureSpawn | StructureTower
+	type Target = Source | TargetStorage
 }

@@ -1,6 +1,7 @@
 import { BuilderRole, HarvesterRole, UpgraderRole } from "roles"
 
 import { CreepTemplate, CreepTemplateBodyPart } from "bodytype"
+import { HarvestTask } from "tasks"
 
 const creepMax: { [key: string]: number } = {
 	harvester: 2,
@@ -42,9 +43,15 @@ export class Overmind {
 			builder: 0 as number
 		}
 
+		let hTask = new HarvestTask(null!)
 		for (let name in Game.creeps) {
 			let creep = Game.creeps[name]
-			creepRole[creep.memory.role!].update(creep)
+			if (creep.memory.role! == "harvester") {
+				hTask.creep = creep
+				hTask.update()
+			} else {
+				creepRole[creep.memory.role!].update(creep)
+			}
 			creepCounter[creep.memory.role!]++
 		}
 
