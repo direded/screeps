@@ -15,7 +15,7 @@ export class BuilderRole implements CreepRole {
 		}
 
 		if (creep.memory.building) {
-			var targets = creep.room.find(FIND_CONSTRUCTION_SITES)
+			let targets = creep.room.find(FIND_CONSTRUCTION_SITES)
 			targets = _.sortBy(targets, (t) => creep.pos.getRangeTo(t))
 			if (targets.length) {
 				if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
@@ -23,7 +23,7 @@ export class BuilderRole implements CreepRole {
 				}
 			}
 		} else {
-			var sources = creep.room.find(FIND_SOURCES)
+			let sources = creep.room.find(FIND_SOURCES)
 			if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
 				creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } })
 			}

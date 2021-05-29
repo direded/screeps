@@ -6,7 +6,7 @@ import { HarvestTask } from "tasks"
 const creepMax: { [key: string]: number } = {
 	harvester: 2,
 	builder: 1,
-	upgrader: 3
+	upgrader: 5
 }
 
 const creepRole: { [key: string]: CreepRole } = {
@@ -58,8 +58,7 @@ export class Overmind {
 		let spawn = room.find(FIND_MY_SPAWNS)[0]
 		let spawnInfo = this.getSpawnEnergyInfo(spawn)
 		if (!spawn.spawning && (spawnInfo.current == spawnInfo.max || creepCounter["harvester"] <= 0)) {
-			for (let i = 0; i < creepRolePriority.length; i++) {
-				let priority = creepRolePriority[i]
+			for (let priority of creepRolePriority) {
 				if (creepCounter[priority] < creepMax[priority]) {
 					let body = creepRoleBody[priority].buildCreepBody(spawnInfo.current)
 					if (body == null) {

@@ -26,7 +26,7 @@ export class HarvestTask extends Task<HarvestTaskMemory> {
 
 	public update(): void {
 		if (this.creep.store.getFreeCapacity() > 0) {
-			var source = this.creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE)
+			let source = this.creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE)
 			if (source == null) {
 				this.creep.say("😒 no active sources")
 				this.creep.moveTo(Game.flags["AFK"])
@@ -38,7 +38,7 @@ export class HarvestTask extends Task<HarvestTaskMemory> {
 			}
 		} else {
 			let target
-			var targets = this.creep.room.find<HarvestTask.TargetStorage>(FIND_STRUCTURES, {
+			let targets = this.creep.room.find<HarvestTask.TargetStorage>(FIND_STRUCTURES, {
 				filter: (structure) => {
 					return (structure.structureType == STRUCTURE_EXTENSION ||
 						structure.structureType == STRUCTURE_SPAWN ||

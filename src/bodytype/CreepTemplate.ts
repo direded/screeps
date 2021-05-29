@@ -13,13 +13,12 @@ export class CreepTemplate {
 	}
 
 	buildCreepBody(energy: number): BodyPartConstant[] | null {
-		var partsCount: { [key in BodyPartConstant]?: number } = {}
-		var fixedCost = 0, fixedCount = 0
-		var ratioSum = 0, ratioCostSum = 0
-		var dynamicParts: CreepTemplateBodyPart[] = []
-		var mainPart = null
-		for (let i = 0; i < this.parts.length; i++) {
-			const el = this.parts[i]
+		let partsCount: { [key in BodyPartConstant]?: number } = {}
+		let fixedCost = 0, fixedCount = 0
+		let ratioSum = 0, ratioCostSum = 0
+		let dynamicParts: CreepTemplateBodyPart[] = []
+		let mainPart = null
+		for (const el of this.parts) {
 			if (el.fixed) {
 				fixedCost += BODYPART_COST[el.name]
 				fixedCount++
@@ -27,7 +26,7 @@ export class CreepTemplate {
 			} else {
 				if (mainPart == null)
 					mainPart = el
-				var ratio = el.value / mainPart.value
+				let ratio = el.value / mainPart.value
 				dynamicParts.push(el)
 				ratioSum += ratio
 				ratioCostSum += ratio * BODYPART_COST[el.name]
@@ -39,10 +38,10 @@ export class CreepTemplate {
 		} else {
 			m = Math.ceil((energy - fixedCost + fixedCount * ratioCostSum) / (ratioCostSum / (this.moveValue * ratioSum) + BODYPART_COST[MOVE]))
 		}
-		// var main = Math.ceil((m / this.moveValue - fixedCount) / ratioSum)
-		var total = energy - fixedCost - m * BODYPART_COST[MOVE]
+		// let main = Math.ceil((m / this.moveValue - fixedCount) / ratioSum)
+		let total = energy - fixedCost - m * BODYPART_COST[MOVE]
 		// now total excludes cost of fixed bodyparts
-		var dynamicCost = m * BODYPART_COST[MOVE]
+		let dynamicCost = m * BODYPART_COST[MOVE]
 		for (const part of dynamicParts) {
 			partsCount[part.name] = Math.floor(part.value * total / BODYPART_COST[part.name])
 			if (partsCount[part.name] == 0) {
@@ -50,7 +49,7 @@ export class CreepTemplate {
 			}
 			dynamicCost += partsCount[part.name]! * BODYPART_COST[part.name]
 		}
-		var body: BodyPartConstant[] = []
+		let body: BodyPartConstant[] = []
 		for (const part of this.parts) {
 			for (let i = 0; i < partsCount[part.name]!; i++) {
 				body.push(part.name)

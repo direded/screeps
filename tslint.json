@@ -28,6 +28,10 @@
       "allow-leading-underscore"
     ],
     "prefer-const": false,
-    "no-string-literal": false
+    "no-string-literal": false,
+    "triple-equals": false,
+    "no-angle-bracket-type-assertion": false,
+    "no-empty-interface": false,
+    "one-variable-per-declaration": false
   }
 }
