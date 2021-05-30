@@ -35,6 +35,7 @@ const creepRoleBody: { [key: string]: CreepTemplate } = {
 export class Overmind {
 
 	public static update(room: Room): void {
+		this.test()
 		this.initMemory()
 
 		const creepCounter: any = {
@@ -65,11 +66,19 @@ export class Overmind {
 						console.log("Can't spawn " + priority)
 						break
 					}
-					if (spawn.spawnCreep(body, `${priority} #${Game.time}`, { memory: { role: priority } }) == 0)
+					if (spawn.spawnCreep(body, `${priority} #${Game.time}`, { memory: { role: priority } }) == 0) {
+						console.log(`Spawn creep ${priority} scheduled`)
 						break
+					}
 				}
 			}
 		}
+	}
+
+	private static test() {
+		creepRoleBody["harvester"].buildCreepBody(500)
+		creepRoleBody["upgrader"].buildCreepBody(500)
+		creepRoleBody["builder"].buildCreepBody(500)
 	}
 
 	private static getSpawnEnergyInfo(spawn: StructureSpawn): { max: number, current: number } {

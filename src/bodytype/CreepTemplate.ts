@@ -20,8 +20,8 @@ export class CreepTemplate {
 		let mainPart = null
 		for (const el of this.parts) {
 			if (el.fixed) {
-				fixedCost += BODYPART_COST[el.name]
-				fixedCount++
+				fixedCost += el.value * BODYPART_COST[el.name]
+				fixedCount += el.value
 				partsCount[el.name] = el.value
 			} else {
 				if (mainPart == null)
